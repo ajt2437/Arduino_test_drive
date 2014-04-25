@@ -23,7 +23,9 @@ int speedpinA=9;//enable motor A
 int pinI3=12;//define I3 interface 
 int pinI4=13;//define I4 interface 
 int speedpinB=10;//enable motor B
-int spead =127;//define the spead of motor
+int spead = 127;//define the spead of motor
+const int echoPin = 1;
+const int trigPin = 2;
  
 void setup()
 {
@@ -33,6 +35,8 @@ void setup()
   pinMode(pinI3,OUTPUT);
   pinMode(pinI4,OUTPUT);
   pinMode(speedpinB,OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(trigPin, OUTPUT);
 }
  
 void forward()
@@ -71,7 +75,7 @@ void right()//
      digitalWrite(pinI2,HIGH);//turn DC Motor A move clockwise
      digitalWrite(pinI1,LOW);
 }
-void stop()//
+void halt()//
 {
      digitalWrite(speedpinA,LOW);// Unenble the pin, to stop the motor. this should be done to avid damaging the motor. 
      digitalWrite(speedpinB,LOW);
@@ -79,19 +83,24 @@ void stop()//
  
 }
 
+double ping() {
+   digitalWrite(trigPin, LOW);
+    delayMicroseconds(2);
+    digitalWrite(trigPin, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trigPin, LOW);
+    double duration = pulseIn(echoPin,HIGH)/2;
+    const float speedOfSound = 343.2;
+    double distance = (duration/1000000) * speedOfSound;
+    return distance;
+}
+
 void loop()
 {
-  left();
-  delay(2000);
-  stop();
-  right();
-  delay(2000);
-  stop();
-  delay(2000);
   forward();
+  delay(4000);
+  halt();
   delay(2000);
-  stop();
-  backward();
-  delay(2000); 
-  stop(); 
+  left();
+  delay(5000);
 }
